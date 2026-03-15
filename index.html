@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imprevista — 10x Data. 10x Skill. 10x Niche.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #fafafa;
+      --fg: #1a1a2e;
+      --accent: #4361ee;
+      --accent-purple: #7209b7;
+      --muted: #6b7280;
+      --card-bg: #ffffff;
+      --card-border: #e5e7eb;
+      --tag-bg: #f3f4f6;
+      --max-w: 1200px;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    /* ---- Scroll progress bar ---- */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: var(--accent);
+      z-index: 200;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* ---- Nav ---- */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(250, 250, 250, 0.0);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      border-bottom: 1px solid transparent;
+      transition: background 0.4s, backdrop-filter 0.4s, border-color 0.4s;
+    }
+
+    nav.scrolled {
+      background: rgba(250, 250, 250, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom-color: var(--card-border);
+    }
+
+    /* Nav starts light on dark hero, switches on scroll */
+    nav .logo { color: rgba(255,255,255,0.95); transition: color 0.4s; text-decoration: none; }
+    nav.scrolled .logo { color: var(--fg); }
+    nav .nav-links a { color: rgba(255,255,255,0.7); transition: color 0.4s; }
+    nav.scrolled .nav-links a { color: var(--muted); }
+    nav.scrolled .nav-links a:hover { color: var(--fg); }
+    nav .nav-links a:hover { color: rgba(255,255,255,1); }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: currentColor;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* ---- Hero (dark, full viewport) ---- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0a0a1a;
+      overflow: hidden;
+    }
+
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.5;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(10,10,26,0.3) 0%, rgba(10,10,26,0.8) 70%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 24px;
+      max-width: 900px;
+    }
+
+    .hero-label {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(67, 97, 238, 0.9);
+      background: rgba(67, 97, 238, 0.12);
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+      border: 1px solid rgba(67, 97, 238, 0.2);
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      color: #fff;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 .accent-word {
+      background: linear-gradient(135deg, #4361ee, #7209b7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: clamp(16px, 2vw, 20px);
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.3);
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .scroll-arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 1.5px solid rgba(255,255,255,0.3);
+      border-bottom: 1.5px solid rgba(255,255,255,0.3);
+      transform: rotate(45deg);
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(45deg) translateY(6px); }
+    }
+
+    /* ---- Subtle grid background (for light sections) ---- */
+    .light-bg {
+      position: relative;
+    }
+
+    .light-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, #d1d5db 0.7px, transparent 0.7px);
+      background-size: 28px 28px;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    /* ---- Sections ---- */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---- Thesis / Problem ---- */
+    .thesis {
+      padding: 140px 0;
+    }
+
+    .thesis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .thesis-text h2 {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+
+    .thesis-text p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .thesis-text p:last-child { margin-bottom: 0; }
+
+    /* Before/After visual */
+    .thesis-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .graph-container {
+      width: 100%;
+      max-width: 460px;
+      aspect-ratio: 1;
+      position: relative;
+    }
+
+    .graph-container svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Graph nodes and edges */
+    .graph-node {
+      transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .graph-edge {
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .graph-container.connected .graph-edge {
+      stroke-dashoffset: 0;
+    }
+
+    .graph-label {
+      opacity: 0;
+      transition: opacity 0.8s ease 1s;
+    }
+
+    .graph-container.connected .graph-label {
+      opacity: 1;
+    }
+
+    /* ---- Section headers ---- */
+    .section-header {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .section-label::before,
+    .section-label::after {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--card-border);
+    }
+
+    .section-header h2 {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    /* ---- How It Works ---- */
+    .how {
+      padding: 140px 0;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .how-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 36px 28px;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+    .how-card:hover {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+      transform: translateY(-4px);
+    }
+
+    .how-card .card-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .how-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .how-card p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .card-icon svg { width: 22px; height: 22px; }
+
+    .icon-blue { background: rgba(67, 97, 238, 0.1); color: var(--accent); }
+    .icon-purple { background: rgba(114, 9, 183, 0.1); color: var(--accent-purple); }
+    .icon-green { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+
+    /* ---- Portfolio ---- */
+    .portfolio {
+      padding: 140px 0;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .portfolio-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-left: 3px solid var(--card-accent, var(--card-border));
+      border-radius: 12px;
+      padding: 32px 28px;
+      transition: box-shadow 0.3s, transform 0.3s, border-left-color 0.3s;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .portfolio-card:hover {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+      transform: translateY(-4px);
+    }
+
+    .portfolio-card[href]:hover {
+      border-left-color: var(--card-accent);
+    }
+
+    .portfolio-card .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .portfolio-card .card-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      background: var(--tag-bg);
+      padding: 4px 10px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+
+    .external-icon {
+      width: 16px;
+      height: 16px;
+      color: var(--muted);
+      opacity: 0;
+      transform: translate(-4px, 4px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .portfolio-card[href]:hover .external-icon {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    .portfolio-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .portfolio-card .card-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .portfolio-card .card-detail {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .card-detail span {
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    /* Card accent colors */
+    .portfolio-card.accent-green { --card-accent: var(--green); }
+    .portfolio-card.accent-blue { --card-accent: var(--accent); }
+    .portfolio-card.accent-amber { --card-accent: var(--amber); }
+    .portfolio-card.accent-purple { --card-accent: var(--accent-purple); }
+
+    /* ---- Divider ---- */
+    .divider {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .divider hr {
+      border: none;
+      border-top: 1px solid var(--card-border);
+    }
+
+    /* ---- Footer ---- */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 100px 0 48px;
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+
+    .footer-tagline {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .footer-contact a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .footer-contact a:hover {
+      border-bottom-color: var(--accent);
+    }
+
+    .footer-copy {
+      margin-top: 56px;
+      font-size: 12px;
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+    /* ---- Animations ---- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered children */
+    .stagger > .reveal:nth-child(1) { transition-delay: 0s; }
+    .stagger > .reveal:nth-child(2) { transition-delay: 0.12s; }
+    .stagger > .reveal:nth-child(3) { transition-delay: 0.24s; }
+    .stagger > .reveal:nth-child(4) { transition-delay: 0.36s; }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 900px) {
+      .thesis-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .thesis-visual { order: -1; }
+      .how-grid { grid-template-columns: 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+
+      .hero h1 { letter-spacing: -1px; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { gap: 20px; }
+
+      .thesis, .how, .portfolio {
+        padding: 80px 0;
+      }
+
+      .section-header { margin-bottom: 48px; }
+      .section-header h2 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Nav -->
+  <nav id="mainNav">
+    <div class="nav-inner">
+      <a href="#" class="logo">Imprevista</a>
+      <ul class="nav-links">
+        <li><a href="#vision">Vision</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero (dark, full viewport with animated canvas) -->
+  <section class="hero" id="vision">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-label">Product Studio</div>
+      <h1><span class="accent-word">10x</span> data. 10x skill. 10x niche.</h1>
+      <p>The data exists. The knowledge exists. The need is specific. We build tools that synthesize overlooked data, accelerate mastery through structure, and solve narrow problems with surgical precision.</p>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- Thesis -->
+  <section class="thesis light-bg">
+    <div class="container">
+      <div class="thesis-grid">
+        <div class="thesis-text reveal">
+          <h2>The data is there.<br>Nobody's connecting it.</h2>
+          <p>Every domain is drowning in information&mdash;books, podcasts, field data, APIs, public records. But it sits in silos. Nobody synthesizes it. The tools are generic. The skill paths are invisible.</p>
+          <p>The result: people plateau because they can't see what to work on next. They miss opportunities because the data is scattered across 17 sources. They use bloated platforms when they need a scalpel.</p>
+          <p>We build the opposite: tools that harness the data nobody else combines, structure knowledge into walkable skill paths, and solve very specific problems with very specific products.</p>
+        </div>
+        <div class="thesis-visual reveal">
+          <div class="graph-container" id="graphContainer">
+            <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Edges (draw in when connected) -->
+              <line class="graph-edge" x1="120" y1="80" x2="200" y2="55" stroke="#4361ee" stroke-width="1.5" opacity="0.35"/>
+              <line class="graph-edge" x1="200" y1="55" x2="290" y2="85" stroke="#4361ee" stroke-width="1.5" opacity="0.35"/>
+              <line class="graph-edge" x1="120" y1="80" x2="100" y2="180" stroke="#4361ee" stroke-width="1.5" opacity="0.3"/>
+              <line class="graph-edge" x1="200" y1="55" x2="200" y2="175" stroke="#7209b7" stroke-width="1.5" opacity="0.4"/>
+              <line class="graph-edge" x1="290" y1="85" x2="300" y2="185" stroke="#4361ee" stroke-width="1.5" opacity="0.3"/>
+              <line class="graph-edge" x1="100" y1="180" x2="200" y2="175" stroke="#7209b7" stroke-width="1.5" opacity="0.35"/>
+              <line class="graph-edge" x1="200" y1="175" x2="300" y2="185" stroke="#4361ee" stroke-width="1.5" opacity="0.35"/>
+              <line class="graph-edge" x1="100" y1="180" x2="80" y2="290" stroke="#4361ee" stroke-width="1.5" opacity="0.25"/>
+              <line class="graph-edge" x1="200" y1="175" x2="200" y2="300" stroke="#7209b7" stroke-width="1.5" opacity="0.35"/>
+              <line class="graph-edge" x1="300" y1="185" x2="320" y2="290" stroke="#4361ee" stroke-width="1.5" opacity="0.25"/>
+              <line class="graph-edge" x1="80" y1="290" x2="200" y2="300" stroke="#4361ee" stroke-width="1.5" opacity="0.3"/>
+              <line class="graph-edge" x1="200" y1="300" x2="320" y2="290" stroke="#7209b7" stroke-width="1.5" opacity="0.3"/>
+
+              <!-- Scattered positions (pre-connection) → Connected positions -->
+              <!-- Row 1: Foundations -->
+              <circle class="graph-node" id="n1" cx="120" cy="80" r="8" fill="#4361ee" opacity="0.7"/>
+              <circle class="graph-node" id="n2" cx="200" cy="55" r="11" fill="#4361ee" opacity="0.9"/>
+              <circle class="graph-node" id="n3" cx="290" cy="85" r="7" fill="#4361ee" opacity="0.6"/>
+
+              <!-- Row 2: Core -->
+              <circle class="graph-node" id="n4" cx="100" cy="180" r="9" fill="#7209b7" opacity="0.7"/>
+              <circle class="graph-node" id="n5" cx="200" cy="175" r="13" fill="#7209b7" opacity="0.9"/>
+              <circle class="graph-node" id="n6" cx="300" cy="185" r="8" fill="#4361ee" opacity="0.7"/>
+
+              <!-- Row 3: Mastery -->
+              <circle class="graph-node" id="n7" cx="80" cy="290" r="6" fill="#4361ee" opacity="0.5"/>
+              <circle class="graph-node" id="n8" cx="200" cy="300" r="10" fill="#7209b7" opacity="0.7"/>
+              <circle class="graph-node" id="n9" cx="320" cy="290" r="7" fill="#4361ee" opacity="0.5"/>
+
+              <!-- Labels -->
+              <text class="graph-label" x="200" y="28" text-anchor="middle" fill="#6b7280" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500">FOUNDATIONS</text>
+              <text class="graph-label" x="200" y="155" text-anchor="middle" fill="#6b7280" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500">CORE SKILLS</text>
+              <text class="graph-label" x="200" y="345" text-anchor="middle" fill="#6b7280" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500">MASTERY</text>
+
+              <!-- Small "document" icons scattered (fade out when connected) -->
+              <g class="scatter-icons" opacity="0.3">
+                <rect x="50" y="120" width="16" height="20" rx="2" fill="none" stroke="#9ca3af" stroke-width="1"/>
+                <line x1="54" y1="126" x2="62" y2="126" stroke="#9ca3af" stroke-width="0.8"/>
+                <line x1="54" y1="130" x2="60" y2="130" stroke="#9ca3af" stroke-width="0.8"/>
+
+                <rect x="340" y="130" width="16" height="20" rx="2" fill="none" stroke="#9ca3af" stroke-width="1"/>
+                <line x1="344" y1="136" x2="352" y2="136" stroke="#9ca3af" stroke-width="0.8"/>
+                <line x1="344" y1="140" x2="350" y2="140" stroke="#9ca3af" stroke-width="0.8"/>
+
+                <rect x="155" y="230" width="16" height="20" rx="2" fill="none" stroke="#9ca3af" stroke-width="1"/>
+                <line x1="159" y1="236" x2="167" y2="236" stroke="#9ca3af" stroke-width="0.8"/>
+                <line x1="159" y1="240" x2="165" y2="240" stroke="#9ca3af" stroke-width="0.8"/>
+
+                <rect x="260" y="240" width="16" height="20" rx="2" fill="none" stroke="#9ca3af" stroke-width="1"/>
+                <line x1="264" y1="246" x2="272" y2="246" stroke="#9ca3af" stroke-width="0.8"/>
+                <line x1="264" y1="250" x2="270" y2="250" stroke="#9ca3af" stroke-width="0.8"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <!-- How It Works -->
+  <section class="how light-bg" id="how">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">The Thesis</div>
+        <h2>Three multipliers</h2>
+      </div>
+      <div class="how-grid stagger">
+        <!-- Card 1: 10x Data -->
+        <div class="how-card reveal">
+          <div class="card-icon icon-blue">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+            </svg>
+          </div>
+          <div class="card-number">01</div>
+          <h3>10x Data</h3>
+          <p>The data already exists&mdash;public APIs, geo datasets, market feeds, community signals. Nobody combines it. We synthesize scattered sources into a single decision surface, so you see what everyone else misses.</p>
+        </div>
+
+        <!-- Card 2: 10x Skill -->
+        <div class="how-card reveal">
+          <div class="card-icon icon-purple">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+            </svg>
+          </div>
+          <div class="card-number">02</div>
+          <h3>10x Skill</h3>
+          <p>Scaffolded mastery. Extract knowledge graphs from raw content&mdash;books, transcripts, field notes. Map what correct and incorrect look like at every level. Make the path from novice to expert visible and walkable.</p>
+        </div>
+
+        <!-- Card 3: 10x Niche -->
+        <div class="how-card reveal">
+          <div class="card-icon icon-green">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+          </div>
+          <div class="card-number">03</div>
+          <h3>10x Niche</h3>
+          <p>Not platforms&mdash;surgical instruments. Hyper-specific tools for hyper-specific needs. One job, done better than anything general-purpose could. The user walks away knowing what to do, not just seeing data.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <!-- Portfolio -->
+  <section class="portfolio light-bg" id="portfolio">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label">Portfolio</div>
+        <h2>The thesis in practice</h2>
+      </div>
+      <div class="portfolio-grid stagger">
+        <!-- CritterScout -->
+        <div class="portfolio-card accent-green reveal">
+          <div class="card-header">
+            <span class="card-tag">Wildlife & Hunting</span>
+          </div>
+          <h3>CritterScout</h3>
+          <p class="card-desc">17 geospatial data sources synthesized into scored hunting locations. Probability, suitability, and pressure in a single decision surface&mdash;so you see what others miss.</p>
+          <div class="card-detail"><span>10x Data</span> &mdash; 17 sources nobody else combines</div>
+        </div>
+
+        <!-- GradeOptimizer -->
+        <a href="https://grade-optimizer.vercel.app" target="_blank" rel="noopener" class="portfolio-card accent-blue reveal">
+          <div class="card-header">
+            <span class="card-tag">Education</span>
+            <svg class="external-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            </svg>
+          </div>
+          <h3>GradeOptimizer</h3>
+          <p class="card-desc">Canvas API data transformed into engagement drift detection. Submission timing patterns and leading indicators surface disengagement before grades drop.</p>
+          <div class="card-detail"><span>10x Skill</span> &mdash; leading indicators surface disengagement early</div>
+        </a>
+
+        <!-- GunDealAlerts -->
+        <a href="https://www.gundealalerts.com" target="_blank" rel="noopener" class="portfolio-card accent-amber reveal">
+          <div class="card-header">
+            <span class="card-tag">E-Commerce</span>
+            <svg class="external-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            </svg>
+          </div>
+          <h3>GunDealAlerts</h3>
+          <p class="card-desc">Reddit noise filtered into curated weekly deal digests. Price history, community signal, and market context&mdash;delivered as a clear buy/skip decision.</p>
+          <div class="card-detail"><span>10x Niche</span> &mdash; one job: best deal of the week</div>
+        </a>
+
+        <!-- Sports Dashboard -->
+        <div class="portfolio-card accent-purple reveal">
+          <div class="card-header">
+            <span class="card-tag">Sports Analytics</span>
+          </div>
+          <h3>Sports Dashboard</h3>
+          <p class="card-desc">Three independent models (MI Bivariate Poisson, Dixon-Coles, Elo) plus xG and odds data converge on a single picks page. Framework-driven edge finding.</p>
+          <div class="card-detail"><span>10x Data</span> &mdash; 3 models converge on one picks page</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><hr></div>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-inner">
+      <div class="footer-logo">Imprevista</div>
+      <p class="footer-tagline">Better data. Faster mastery. Sharper tools.</p>
+      <div class="footer-contact">
+        <a href="mailto:hello@imprevista.com">hello@imprevista.com</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Imprevista</p>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Hero canvas: animated graph network ----
+    (function() {
+      const canvas = document.getElementById('hero-canvas');
+      const ctx = canvas.getContext('2d');
+      let w, h, nodes = [], mouse = { x: -1000, y: -1000 };
+      const NODE_COUNT = 60;
+      const CONNECT_DIST = 150;
+
+      function resize() {
+        w = canvas.width = canvas.offsetWidth;
+        h = canvas.height = canvas.offsetHeight;
+      }
+
+      function initNodes() {
+        nodes = [];
+        for (let i = 0; i < NODE_COUNT; i++) {
+          nodes.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            r: Math.random() * 2 + 1.5,
+            color: Math.random() > 0.6 ? '#7209b7' : '#4361ee'
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+
+        // Draw edges
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[i].x - nodes[j].x;
+            const dy = nodes[i].y - nodes[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < CONNECT_DIST) {
+              const alpha = (1 - dist / CONNECT_DIST) * 0.15;
+              ctx.strokeStyle = `rgba(67, 97, 238, ${alpha})`;
+              ctx.lineWidth = 0.8;
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Draw nodes
+        for (const n of nodes) {
+          ctx.fillStyle = n.color;
+          ctx.globalAlpha = 0.6;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+
+        // Update positions
+        for (const n of nodes) {
+          n.x += n.vx;
+          n.y += n.vy;
+          if (n.x < 0 || n.x > w) n.vx *= -1;
+          if (n.y < 0 || n.y > h) n.vy *= -1;
+
+          // Subtle mouse repulsion
+          const dx = n.x - mouse.x;
+          const dy = n.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            n.vx += dx * 0.0003;
+            n.vy += dy * 0.0003;
+          }
+
+          // Dampen velocity
+          n.vx *= 0.999;
+          n.vy *= 0.999;
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', () => { resize(); });
+      canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+      });
+      canvas.addEventListener('mouseleave', () => { mouse.x = -1000; mouse.y = -1000; });
+
+      resize();
+      initNodes();
+      draw();
+    })();
+
+    // ---- Scroll progress bar ----
+    const progressBar = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (scrollTop / docHeight * 100) + '%';
+    }, { passive: true });
+
+    // ---- Nav scroll state ----
+    const nav = document.getElementById('mainNav');
+    const hero = document.querySelector('.hero');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          nav.classList.remove('scrolled');
+        } else {
+          nav.classList.add('scrolled');
+        }
+      });
+    }, { threshold: 0.1 });
+    navObserver.observe(hero);
+
+    // ---- Reveal on scroll (with stagger support) ----
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ---- Knowledge graph: connect on scroll ----
+    const graphContainer = document.getElementById('graphContainer');
+    const graphObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          graphContainer.classList.add('connected');
+        }
+      });
+    }, { threshold: 0.4 });
+    graphObserver.observe(graphContainer);
+  </script>
+
+</body>
+</html>
