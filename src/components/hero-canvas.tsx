@@ -116,14 +116,13 @@ export function HeroCanvas() {
           Product Studio
         </div>
         <h1 className="text-[clamp(32px,6vw,56px)] font-bold tracking-tight text-white leading-[1.1] mb-6">
-          <span className="text-primary">10x</span> data.{" "}
-          <span className="text-primary">10x</span> skill.{" "}
-          <span className="text-primary">10x</span> niche.
+          Software doesn&rsquo;t have{" "}
+          <span className="text-primary">gatekeepers</span> anymore.
         </h1>
         <p className="text-[16px] text-white/50 leading-relaxed max-w-xl mx-auto">
-          The data exists. The knowledge exists. The need is specific. We build
-          tools that synthesize overlooked data, accelerate mastery through
-          structure, and solve narrow problems with surgical precision.
+          A product needs two things: a real problem and a real edge. For
+          thirty years there was a third&mdash;permission&mdash;and it only
+          existed because building was expensive. That part is gone.
         </p>
       </div>
 

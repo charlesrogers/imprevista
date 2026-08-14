@@ -17,15 +17,15 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Imprevista — 10x Data. 10x Skill. 10x Niche.",
+    default: "Imprevista — Software doesn't have gatekeepers anymore",
     template: "%s | Imprevista",
   },
   description:
-    "Tools that synthesize overlooked data, accelerate mastery, and solve narrow problems with surgical precision.",
+    "A product studio built on one argument: a product needs a real problem and a real edge — permission is no longer on the list.",
   openGraph: {
-    title: "Imprevista — 10x Data. 10x Skill. 10x Niche.",
+    title: "Imprevista — Software doesn't have gatekeepers anymore",
     description:
-      "Tools that synthesize overlooked data, accelerate mastery, and solve narrow problems with surgical precision.",
+      "A product studio built on one argument: a product needs a real problem and a real edge — permission is no longer on the list.",
     siteName: "Imprevista",
     url: "https://imprevista.com",
   },

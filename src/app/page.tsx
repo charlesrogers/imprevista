@@ -1,15 +1,19 @@
 import { HeroCanvas } from "@/components/hero-canvas";
-import { ThesisSection } from "@/components/thesis-section";
-import { MultipliersGrid } from "@/components/multipliers-grid";
-import { ProductGrid } from "@/components/product-grid";
+import {
+  HarderProblem,
+  ComplaintsAreJobs,
+  GateMoved,
+} from "@/components/argument";
+import { PlyFeature } from "@/components/ply-feature";
 
 export default function Home() {
   return (
     <>
       <HeroCanvas />
-      <ThesisSection />
-      <MultipliersGrid />
-      <ProductGrid />
+      <HarderProblem />
+      <ComplaintsAreJobs />
+      <GateMoved />
+      <PlyFeature />
     </>
   );
 }

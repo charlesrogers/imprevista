@@ -12,8 +12,8 @@ export function Footer() {
               Imprevista
             </Link>
             <p className="mt-3 text-[13px] text-muted-foreground leading-relaxed max-w-xs">
-              Tools that synthesize overlooked data, accelerate mastery, and
-              solve narrow problems with surgical precision.
+              A product studio. A real problem and a real edge&mdash;no
+              permission required.
             </p>
           </div>
 
